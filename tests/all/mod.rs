@@ -1,4 +1,4 @@
-use comfy_table::Table;
+use super_table::Table;
 use unicode_width::UnicodeWidthStr;
 
 mod add_predicate;

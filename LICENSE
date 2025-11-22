@@ -1,6 +1,9 @@
 MIT License
 
 Copyright (c) 2019 Arne Beer
+Copyright (c) 2025 Ben Rogmans
+
+This project is a fork of comfy-table (https://github.com/nukesor/comfy-table) by Arne Beer.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

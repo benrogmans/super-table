@@ -1,10 +1,10 @@
 use pretty_assertions::assert_eq;
 
-use comfy_table::*;
+use super_table::*;
 
 #[test]
 /// UTF-8 symbols that are longer than a single character are properly handled.
-/// This means, that comfy-table detects that they're longer than 1 character and styles/arranges
+/// This means, that super-table detects that they're longer than 1 character and styles/arranges
 /// the table accordingly.
 fn multi_character_utf8_symbols() {
     let mut table = Table::new();

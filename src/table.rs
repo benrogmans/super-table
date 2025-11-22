@@ -101,7 +101,7 @@ impl Table {
     /// There'll be no header unless you explicitly set it with this function.
     ///
     /// ```
-    /// use comfy_table::{Table, Row};
+    /// use super_table::{Table, Row};
     ///
     /// let mut table = Table::new();
     /// let header = Row::from(vec!["Header One", "Header Two"]);
@@ -122,7 +122,7 @@ impl Table {
     /// Returns the number of currently present columns.
     ///
     /// ```
-    /// use comfy_table::Table;
+    /// use super_table::Table;
     ///
     /// let mut table = Table::new();
     /// table.set_header(vec!["Col 1", "Col 2", "Col 3"]);
@@ -137,7 +137,7 @@ impl Table {
     /// Add a new row to the table.
     ///
     /// ```
-    /// use comfy_table::{Table, Row};
+    /// use super_table::{Table, Row};
     ///
     /// let mut table = Table::new();
     /// table.add_row(vec!["One", "Two"]);
@@ -154,7 +154,7 @@ impl Table {
     /// Add a new row to the table if the predicate evaluates to `true`.
     ///
     /// ```
-    /// use comfy_table::{Table, Row};
+    /// use super_table::{Table, Row};
     ///
     /// let mut table = Table::new();
     /// table.add_row_if(|index, row| true, vec!["One", "Two"]);
@@ -174,7 +174,7 @@ impl Table {
     /// Add multiple rows to the table.
     ///
     /// ```
-    /// use comfy_table::{Table, Row};
+    /// use super_table::{Table, Row};
     ///
     /// let mut table = Table::new();
     /// let rows = vec![
@@ -201,7 +201,7 @@ impl Table {
     /// Add multiple rows to the table if the predicate evaluates to `true`.
     ///
     /// ```
-    /// use comfy_table::{Table, Row};
+    /// use super_table::{Table, Row};
     ///
     /// let mut table = Table::new();
     /// let rows = vec![
@@ -226,7 +226,7 @@ impl Table {
     /// Returns the number of currently present rows.
     ///
     /// ```
-    /// use comfy_table::Table;
+    /// use super_table::Table;
     ///
     /// let mut table = Table::new();
     /// table.add_row(vec!["One", "Two"]);
@@ -240,7 +240,7 @@ impl Table {
     /// Returns if the table is empty (contains no data rows).
     ///
     /// ```
-    /// use comfy_table::Table;
+    /// use super_table::Table;
     ///
     /// let mut table = Table::new();
     /// assert!(table.is_empty());
@@ -290,7 +290,7 @@ impl Table {
     /// Specify how Comfy Table should arrange the content in your table.
     ///
     /// ```
-    /// use comfy_table::{Table, ContentArrangement};
+    /// use super_table::{Table, ContentArrangement};
     ///
     /// let mut table = Table::new();
     /// table.set_content_arrangement(ContentArrangement::Dynamic);
@@ -309,7 +309,7 @@ impl Table {
     /// Set the delimiter used to split text in all cells.
     ///
     /// A custom delimiter on a cell in will overwrite the column's delimiter.\
-    /// Normal text uses spaces (` `) as delimiters. This is necessary to help comfy-table
+    /// Normal text uses spaces (` `) as delimiters. This is necessary to help super-table
     /// understand the concept of _words_.
     pub fn set_delimiter(&mut self, delimiter: char) -> &mut Self {
         self.delimiter = Some(delimiter);
@@ -355,7 +355,7 @@ impl Table {
 
     /// Returns whether the table will be handled as if it's printed to a tty.
     ///
-    /// By default, comfy-table looks at `stdout` and checks whether it's a tty.
+    /// By default, super-table looks at `stdout` and checks whether it's a tty.
     /// This behavior can be changed via [Table::force_no_tty] and [Table::use_stderr].
     #[cfg(feature = "tty")]
     pub fn is_tty(&self) -> bool {
@@ -379,7 +379,7 @@ impl Table {
     /// Only useful if you forcefully disabled tty, but still want those fancy terminal styles.
     ///
     /// ```
-    /// use comfy_table::Table;
+    /// use super_table::Table;
     ///
     /// let mut table = Table::new();
     /// table.force_no_tty()
@@ -420,7 +420,7 @@ impl Table {
     ///
     /// If more constraints are passed than there are columns, any superfluous constraints will be ignored.
     /// ```
-    /// use comfy_table::{Width::*, CellAlignment, ColumnConstraint::*, ContentArrangement, Table};
+    /// use super_table::{Width::*, CellAlignment, ColumnConstraint::*, ContentArrangement, Table};
     ///
     /// let mut table = Table::new();
     /// table.add_row(&vec!["one", "two", "three"])
@@ -484,8 +484,8 @@ impl Table {
     /// A pure convenience method, so you're not force to fiddle with those preset strings yourself.
     ///
     /// ```
-    /// use comfy_table::Table;
-    /// use comfy_table::presets::UTF8_FULL;
+    /// use super_table::Table;
+    /// use super_table::presets::UTF8_FULL;
     ///
     /// let mut table = Table::new();
     /// table.load_preset(UTF8_FULL);
@@ -511,9 +511,9 @@ impl Table {
     /// For instance, the [UTF8_ROUND_CORNERS](crate::style::modifiers::UTF8_ROUND_CORNERS) modifies all corners to be round UTF8 box corners.
     ///
     /// ```
-    /// use comfy_table::Table;
-    /// use comfy_table::presets::UTF8_FULL;
-    /// use comfy_table::modifiers::UTF8_ROUND_CORNERS;
+    /// use super_table::Table;
+    /// use super_table::presets::UTF8_FULL;
+    /// use super_table::modifiers::UTF8_ROUND_CORNERS;
     ///
     /// let mut table = Table::new();
     /// table.load_preset(UTF8_FULL);
@@ -556,9 +556,9 @@ impl Table {
     /// the first line wouldn't be displayed at all.
     ///
     /// ```
-    /// use comfy_table::Table;
-    /// use comfy_table::presets::UTF8_FULL;
-    /// use comfy_table::TableComponent::*;
+    /// use super_table::Table;
+    /// use super_table::presets::UTF8_FULL;
+    /// use super_table::TableComponent::*;
     ///
     /// let mut table = Table::new();
     /// // Load the UTF8_FULL preset
@@ -578,8 +578,8 @@ impl Table {
 
     /// Get a copy of the char that's currently used for drawing this component.
     /// ```
-    /// use comfy_table::Table;
-    /// use comfy_table::TableComponent::*;
+    /// use super_table::Table;
+    /// use super_table::TableComponent::*;
     ///
     /// let mut table = Table::new();
     /// assert_eq!(table.style(TopLeftCorner), Some('+'));
@@ -615,7 +615,7 @@ impl Table {
     /// Get a mutable iterator over all columns.
     ///
     /// ```
-    /// use comfy_table::{Width::*, ColumnConstraint::*, Table};
+    /// use super_table::{Width::*, ColumnConstraint::*, Table};
     ///
     /// let mut table = Table::new();
     /// table.add_row(&vec!["First", "Second", "Third"]);
@@ -645,7 +645,7 @@ impl Table {
     /// rows that are missing this specific Cell.
     ///
     /// ```
-    /// use comfy_table::Table;
+    /// use super_table::Table;
     /// let mut table = Table::new();
     /// table.add_row(&vec!["First", "Second"]);
     /// table.add_row(&vec!["Third"]);
@@ -672,7 +672,7 @@ impl Table {
     /// rows that are missing this specific Cell.
     ///
     /// ```
-    /// use comfy_table::Table;
+    /// use super_table::Table;
     /// let mut table = Table::new();
     /// table.set_header(&vec!["A", "B"]);
     /// table.add_row(&vec!["First", "Second"]);
@@ -718,7 +718,7 @@ impl Table {
     /// Get a mutable iterator over all rows.
     ///
     /// ```
-    /// use comfy_table::Table;
+    /// use super_table::Table;
     /// let mut table = Table::new();
     /// table.add_row(&vec!["First", "Second", "Third"]);
     ///

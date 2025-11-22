@@ -1,5 +1,5 @@
-use comfy_table::presets::UTF8_FULL;
-use comfy_table::*;
+use super_table::presets::UTF8_FULL;
+use super_table::*;
 
 fn main() {
     let mut table = Table::new();

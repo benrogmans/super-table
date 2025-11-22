@@ -11,7 +11,7 @@ use crate::style::{CellAlignment, ColumnConstraint};
 /// As a result columns can only be modified after the table is populated by some data.
 ///
 /// ```
-/// use comfy_table::{Width::*, CellAlignment, ColumnConstraint::*, Table};
+/// use super_table::{Width::*, CellAlignment, ColumnConstraint::*, Table};
 ///
 /// let mut table = Table::new();
 /// table.set_header(&vec!["one", "two"]);
@@ -70,7 +70,7 @@ impl Column {
     /// Set the delimiter used to split text for this column's cells.
     ///
     /// A custom delimiter on a cell in will overwrite the column's delimiter.
-    /// Normal text uses spaces (` `) as delimiters. This is necessary to help comfy-table
+    /// Normal text uses spaces (` `) as delimiters. This is necessary to help super-table
     /// understand the concept of _words_.
     pub fn set_delimiter(&mut self, delimiter: char) -> &mut Self {
         self.delimiter = Some(delimiter);

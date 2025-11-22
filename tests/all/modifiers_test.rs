@@ -1,8 +1,8 @@
 use pretty_assertions::assert_eq;
 
-use comfy_table::modifiers::*;
-use comfy_table::presets::*;
-use comfy_table::*;
+use super_table::modifiers::*;
+use super_table::presets::*;
+use super_table::*;
 
 fn get_preset_table() -> Table {
     let mut table = Table::new();

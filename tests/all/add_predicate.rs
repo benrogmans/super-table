@@ -1,6 +1,6 @@
 use pretty_assertions::assert_eq;
 
-use comfy_table::*;
+use super_table::*;
 
 #[test]
 fn add_predicate_single_true() {

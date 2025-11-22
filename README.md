@@ -1,16 +1,12 @@
-# Comfy-table
+# Super-table
 
-[![GitHub Actions Workflow](https://github.com/Nukesor/comfy-table/actions/workflows/test.yml/badge.svg)](https://github.com/Nukesor/comfy-table/actions/workflows/test.yml)
-[![docs](https://docs.rs/comfy-table/badge.svg)](https://docs.rs/comfy-table/)
-[![license](http://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/nukesor/comfy-table/blob/main/LICENSE)
-[![Crates.io](https://img.shields.io/crates/v/comfy-table.svg)](https://crates.io/crates/comfy-table)
-[![codecov](https://codecov.io/gh/nukesor/comfy-table/branch/main/graph/badge.svg)](https://codecov.io/gh/nukesor/comfy-table)
+[![GitHub Actions Workflow](https://github.com/benrogmans/super-table/actions/workflows/quality.yml/badge.svg)](https://github.com/benrogmans/super-table/actions/workflows/quality.yml)
+[![docs](https://docs.rs/super-table/badge.svg)](https://docs.rs/super-table/)
+[![license](http://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/benrogmans/super-table/blob/main/LICENSE)
+[![Crates.io](https://img.shields.io/crates/v/super-table.svg)](https://crates.io/crates/super-table)
+[![codecov](https://codecov.io/gh/benrogmans/super-table/branch/main/graph/badge.svg)](https://codecov.io/gh/benrogmans/super-table)
 
-![comfy-table](https://raw.githubusercontent.com/Nukesor/images/main/comfy_table.gif)
-
-<!--- [![dependency status](https://deps.rs/repo/github/nukesor/comfy-table/status.svg)](https://deps.rs/repo/github/nukesor/comfy-table) -->
-
-Comfy-table is designed as a library for building beautiful terminal tables, while being easy to use.
+Super-table is designed as a library for building beautiful terminal tables, while being easy to use. It includes some features that are not provided by other CLI tables, such as cell spanning across columns and rows.
 
 ## Table of Contents
 
@@ -18,20 +14,10 @@ Comfy-table is designed as a library for building beautiful terminal tables, whi
 - [Examples](#examples)
 - [Feature Flags](#feature-flags)
 - [Contributing](#contributing)
-- [Usage of unsafe](#unsafe)
-- [Comparison with other libraries](#comparison-with-other-libraries)
 
 ## State of the Project
 
-Comfy-table can be considered "finished".
-It contains all major features that were planned and received a lot of additional features along the way!
-As far as I'm aware, there're no lingering bugs and the project has a lot of test coverage.
-
-"Finished" means:
-
-- Comfy-table still receives regular version bumps for its few dependencies.
-- Pull requests for wished for and approved features will be reviewed and eventually merged.
-- New releases are pushed when new features are added or when requested.
+Super-table is actively maintained and open to new features and improvements.
 
 ## Features
 
@@ -48,13 +34,13 @@ As far as I'm aware, there're no lingering bugs and the project has a lot of tes
   - These numbers are from a overclocked `i7-8700K` with a max single-core performance of 4.9GHz.
   - To run the benchmarks yourselves, install criterion via `cargo install cargo-criterion` and run `cargo criterion` afterwards.
 
-Comfy-table is written for the current `stable` Rust version.
+Super-table is written for the current `stable` Rust version.
 Older Rust versions may work but aren't officially supported.
 
 ## Examples
 
 ```rust
-use comfy_table::Table;
+use super_table::Table;
 
 fn main() {
     let mut table = Table::new();
@@ -93,9 +79,9 @@ This table will become as wide as your content. Nothing fancy happening here.
 ### More Features
 
 ```rust
-use comfy_table::modifiers::UTF8_ROUND_CORNERS;
-use comfy_table::presets::UTF8_FULL;
-use comfy_table::*;
+use super_table::modifiers::UTF8_ROUND_CORNERS;
+use super_table::presets::UTF8_FULL;
+use super_table::*;
 
 fn main() {
     let mut table = Table::new();
@@ -148,8 +134,8 @@ On top of this, we set the default alignment for the right column to `Right` and
 ### Styling
 
 ```rust
-use comfy_table::presets::UTF8_FULL;
-use comfy_table::*;
+use super_table::presets::UTF8_FULL;
+use super_table::*;
 
 fn main() {
     let mut table = Table::new();
@@ -186,12 +172,12 @@ This code generates the table that can be seen at the top of this document.
 
 ### Cell Spanning
 
-Comfy-table supports cell spanning, allowing cells to span multiple columns (colspan) and/or rows (rowspan). This enables more complex table layouts.
+Super-table supports cell spanning, allowing cells to span multiple columns (colspan) and/or rows (rowspan). This enables more complex table layouts.
 
 #### Basic Colspan Example
 
 ```rust
-use comfy_table::{Cell, Table};
+use super_table::{Cell, Table};
 
 fn main() {
     let mut table = Table::new();
@@ -220,7 +206,7 @@ fn main() {
 #### Basic Rowspan Example
 
 ```rust
-use comfy_table::{Cell, Table};
+use super_table::{Cell, Table};
 
 fn main() {
     let mut table = Table::new();
@@ -254,7 +240,7 @@ fn main() {
 #### Combined Colspan and Rowspan Example
 
 ```rust
-use comfy_table::{Cell, Table};
+use super_table::{Cell, Table};
 
 fn main() {
     let mut table = Table::new();
@@ -300,7 +286,7 @@ To test an example, run `cargo run --example $name`. E.g.:
 cargo run --example readme_table
 ```
 
-If you're looking for more information, take a look at the [tests folder](https://github.com/Nukesor/comfy-table/tree/main/tests).
+If you're looking for more information, take a look at the [tests folder](https://github.com/benrogmans/super-table/tree/main/tests).
 There are tests for almost every feature including a visual view for each resulting table.
 
 ## Feature Flags
@@ -319,95 +305,30 @@ This flag enables support for custom styling of text inside of cells.
 
 - Text formatting still works, even if you roll your own ANSI escape sequences.
 - Rainbow text
-- Makes comfy-table 30-50% slower
+- Makes super-table 30-50% slower
 
 ### `reexport_crossterm` (disabled)
 
-With this flag, comfy-table re-exposes crossterm's [`Attribute`](https://docs.rs/crossterm/latest/crossterm/style/enum.Attribute.html) and [`Color`](https://docs.rs/crossterm/latest/crossterm/style/enum.Color.html) enum.
+With this flag, super-table re-exposes crossterm's [`Attribute`](https://docs.rs/crossterm/latest/crossterm/style/enum.Attribute.html) and [`Color`](https://docs.rs/crossterm/latest/crossterm/style/enum.Color.html) enum.
 By default, a mirrored type is exposed, which internally maps to the crossterm type.
 
-This feature is very convenient if you use both comfy-table and crossterm in your code and want to use crossterm's types for everything interchangeably.
+This feature is very convenient if you use both super-table and crossterm in your code and want to use crossterm's types for everything interchangeably.
 
 **BUT** if you enable this feature, you opt-in for breaking changes on minor/patch versions.
-Meaning, you have to update crossterm whenever you update comfy-table and you **cannot** update crossterm until comfy-table released a new version with that crossterm version.
+Meaning, you have to update crossterm whenever you update super-table and you **cannot** update crossterm until super-table released a new version with that crossterm version.
 
 ## Contributing
 
-Comfy-table's main focus is on being minimalistic and reliable.
-A fixed set of features that just work for "normal" use-cases:
+Super-table's main focus is on being reliable and feature-rich.
+Core features include:
 
 - Normal tables (columns, rows, one cell per column/row).
 - Cell spanning (colspan and rowspan) for complex layouts.
 - Dynamic arrangement of content to a given width.
 - Some kind of manual intervention in the arrangement process.
 
-If you come up with an idea or an improvement that fits into the current scope of the project, feel free to create an issue :)!
+If you come up with an idea or an improvement, feel free to create an issue!
 
-Some things however will most likely not be added to the project since they drastically increase the complexity of the library or cover very specific edge-cases.
+## Attribution
 
-Such features are:
-
-- Nested tables
-- CSV to table conversion and vice versa
-
-## Unsafe
-
-Comfy-table doesn't allow `unsafe` code in its code-base.
-As it's a "simple" formatting library it also shouldn't be needed in the future.
-
-If one disables the `tty` feature flag, this is also true for all of its dependencies.
-
-However, when enabling `tty`, Comfy-table uses one unsafe function call in its dependencies. \
-It can be circumvented by explicitly calling [Table::force_no_tty](https://docs.rs/comfy-table/latest/comfy_table/struct.Table.html#method.force_no_tty).
-
-1. `crossterm::terminal::size`. This function is necessary to detect the current terminal width if we're on a tty.
-   This is only called if no explicit width is provided via `Table::set_width`.
-
-   <http://rosettacode.org/wiki/Terminal_control/Dimensions#Library:_BSD_libc>
-   This is another libc call which is used to communicate with `/dev/tty` via a file descriptor.
-
-   ```rust,ignore
-   ...
-   if wrap_with_result(unsafe { ioctl(fd, TIOCGWINSZ.into(), &mut size) }).is_ok() {
-       Ok((size.ws_col, size.ws_row))
-   } else {
-       tput_size().ok_or_else(|| std::io::Error::last_os_error().into())
-   }
-   ...
-   ```
-
-## Comparison with other libraries
-
-The following are official statements of the other crate authors.
-[This ticket](https://github.com/Nukesor/comfy-table/issues/76) can be used as an entry to find all other sibling tickets in the other projects.
-
-### Cli-table
-
-The main focus of [`cli-table`](https://crates.io/crates/cli-table) is to support all platforms and at the same time limit the dependencies to keep the compile times and crate size low.
-
-Currently, this crate only pulls two external dependencies (other than cli-table-derive):
-
-- termcolor
-- unicode-width
-
-With csv feature enabled, it also pulls csv crate as dependency.
-
-### Term-table
-
-[`term-table`](https://crates.io/crates/term-table) is pretty basic in terms of features.
-My goal with the project is to provide a good set of tools for rendering CLI tables, while also allowing users to bring their own tools for things like colours.
-One thing that is unique to `term-table` (as far as I'm aware) is the ability to have different number of columns in each row of the table.
-
-### Prettytables-rs
-
-[`prettytables-rs`](https://crates.io/crates/prettytable-rs) provides functionality for formatting and aligning tables.
-It his however abandoned since over three years and a [rustsec/advisory-db](https://github.com/rustsec/advisory-db/issues/1173) entry has been requested.
-
-### Comfy-table
-
-One of [`comfy-table`](https://crates.io/crates/comfy-table)'s big foci is on providing a minimalistic, but rock-solid library for building text-based tables.
-This means that the code is very well tested, no usage of `unsafe` and `unwrap` is only used if we can be absolutely sure that it's safe.
-There're only one occurrence of `unsafe` in all of comfy-table's dependencies, to be exact inside the `tty` communication code, which can be explicitly disabled.
-
-The other focus is on dynamic-length content arrangement.
-This means that a lot of work went into building an algorithm that finds a (near) optimal table layout for any given text and terminal width.
+Super-table is a fork of [comfy-table](https://github.com/nukesor/comfy-table) by Arne Beer. Super-table maintains the same core functionality while allowing for independent development and feature additions, most notably cell spanning over rows and columns.

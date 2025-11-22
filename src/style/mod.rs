@@ -28,7 +28,7 @@ mod styling_enums {
 }
 
 /// Re-export the crossterm type directly instead of using the internal mirrored types.
-/// This result in possible ABI incompatibilities when using comfy_table and crossterm in the same
+/// This result in possible ABI incompatibilities when using super_table and crossterm in the same
 /// project with different versions, but may also be very convenient for developers.
 #[cfg(all(feature = "tty", feature = "reexport_crossterm"))]
 mod styling_enums {

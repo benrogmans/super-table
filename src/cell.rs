@@ -63,7 +63,7 @@ impl Cell {
     }
 
     /// Set the delimiter used to split text for this cell. \
-    /// Normal text uses spaces (` `) as delimiters. This is necessary to help comfy-table
+    /// Normal text uses spaces (` `) as delimiters. This is necessary to help super-table
     /// understand the concept of _words_.
     #[must_use]
     pub fn set_delimiter(mut self, delimiter: char) -> Self {
@@ -77,8 +77,8 @@ impl Cell {
     /// Setting this overwrites alignment settings of the
     /// [Column](crate::column::Column::set_cell_alignment) for this specific cell.
     /// ```
-    /// use comfy_table::CellAlignment;
-    /// use comfy_table::Cell;
+    /// use super_table::CellAlignment;
+    /// use super_table::Cell;
     ///
     /// let mut cell = Cell::new("Some content")
     ///     .set_alignment(CellAlignment::Center);
@@ -94,8 +94,8 @@ impl Cell {
     ///
     /// Look at [Color](crate::Color) for a list of all possible Colors.
     /// ```
-    /// use comfy_table::Color;
-    /// use comfy_table::Cell;
+    /// use super_table::Color;
+    /// use super_table::Cell;
     ///
     /// let mut cell = Cell::new("Some content")
     ///     .fg(Color::Red);
@@ -112,8 +112,8 @@ impl Cell {
     ///
     /// Look at [Color](crate::Color) for a list of all possible Colors.
     /// ```
-    /// use comfy_table::Color;
-    /// use comfy_table::Cell;
+    /// use super_table::Color;
+    /// use super_table::Cell;
     ///
     /// let mut cell = Cell::new("Some content")
     ///     .bg(Color::Red);
@@ -131,8 +131,8 @@ impl Cell {
     ///
     /// Look at [Attribute](crate::Attribute) for a list of all possible Colors.
     /// ```
-    /// use comfy_table::Attribute;
-    /// use comfy_table::Cell;
+    /// use super_table::Attribute;
+    /// use super_table::Cell;
     ///
     /// let mut cell = Cell::new("Some content")
     ///     .add_attribute(Attribute::Bold);
@@ -164,7 +164,7 @@ impl Cell {
     /// # Examples
     ///
     /// ```
-    /// use comfy_table::{Cell, Table};
+    /// use super_table::{Cell, Table};
     ///
     /// let mut table = Table::new();
     /// table
@@ -201,7 +201,7 @@ impl Cell {
     /// # Examples
     ///
     /// ```
-    /// use comfy_table::{Cell, Table};
+    /// use super_table::{Cell, Table};
     ///
     /// let mut table = Table::new();
     /// table
@@ -238,7 +238,7 @@ impl Cell {
     /// Returns 1 if no colspan is set (default behavior).
     ///
     /// ```
-    /// use comfy_table::Cell;
+    /// use super_table::Cell;
     ///
     /// let cell = Cell::new("Content");
     /// assert_eq!(cell.colspan(), 1);
@@ -255,7 +255,7 @@ impl Cell {
     /// Returns 1 if no rowspan is set (default behavior).
     ///
     /// ```
-    /// use comfy_table::Cell;
+    /// use super_table::Cell;
     ///
     /// let cell = Cell::new("Content");
     /// assert_eq!(cell.rowspan(), 1);
@@ -270,7 +270,7 @@ impl Cell {
     /// Alias for [set_colspan](Cell::set_colspan).
     ///
     /// ```
-    /// use comfy_table::Cell;
+    /// use super_table::Cell;
     ///
     /// let cell = Cell::new("Spans 2 columns")
     ///     .span_columns(2);
@@ -283,7 +283,7 @@ impl Cell {
     /// Alias for [set_rowspan](Cell::set_rowspan).
     ///
     /// ```
-    /// use comfy_table::Cell;
+    /// use super_table::Cell;
     ///
     /// let cell = Cell::new("Spans 2 rows")
     ///     .span_rows(2);
@@ -297,7 +297,7 @@ impl Cell {
 /// Convert anything with [ToString] to a new [Cell].
 ///
 /// ```
-/// # use comfy_table::Cell;
+/// # use super_table::Cell;
 /// let cell: Cell = "content".into();
 /// let cell: Cell = 5u32.into();
 /// ```
@@ -318,7 +318,7 @@ pub struct Cells(pub Vec<Cell>);
 /// By default this is implemented for all Iterators over items implementing [ToString].
 ///
 /// ```
-/// use comfy_table::{Row, Cells};
+/// use super_table::{Row, Cells};
 ///
 /// let cells_string: Cells = vec!["One", "Two", "Three"].into();
 /// let cells_integer: Cells = vec![1, 2, 3, 4].into();

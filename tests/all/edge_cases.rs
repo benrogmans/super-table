@@ -1,4 +1,4 @@
-use comfy_table::*;
+use super_table::*;
 
 /// A gigantic table can generated, even if it's longer than the longest supported width.
 #[test]

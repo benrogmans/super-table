@@ -1,5 +1,5 @@
-use comfy_table::presets::UTF8_FULL;
-use comfy_table::*;
+use super_table::presets::UTF8_FULL;
+use super_table::*;
 
 // This example works even with the `tty` feature disabled
 // You can try it out with `cargo run --example no_tty --no-default-features`

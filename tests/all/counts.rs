@@ -1,6 +1,6 @@
 use pretty_assertions::assert_eq;
 
-use comfy_table::*;
+use super_table::*;
 
 #[test]
 fn test_col_count_header() {

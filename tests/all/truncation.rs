@@ -1,8 +1,8 @@
 use pretty_assertions::assert_eq;
 
-use comfy_table::ColumnConstraint::*;
-use comfy_table::Width::*;
-use comfy_table::{ContentArrangement, Row, Table};
+use super_table::ColumnConstraint::*;
+use super_table::Width::*;
+use super_table::{ContentArrangement, Row, Table};
 
 use crate::all::assert_table_line_width;
 
@@ -125,7 +125,7 @@ fn table_with_composite_utf8_strings() {
         .set_header(vec!["Header1"])
         .set_width(20)
         .add_row(vec!["あいうえおかきくけこさしすせそたちつてと"])
-        .set_content_arrangement(comfy_table::ContentArrangement::Dynamic);
+        .set_content_arrangement(super_table::ContentArrangement::Dynamic);
 
     for row in table.row_iter_mut() {
         row.max_height(1); // 2 -> also panics, 3 -> ok
@@ -151,7 +151,7 @@ fn table_with_composite_utf8_strings_2_lines() {
         .set_header(vec!["Header1"])
         .set_width(20)
         .add_row(vec!["あいうえおかきくけこさしすせそたちつてと"])
-        .set_content_arrangement(comfy_table::ContentArrangement::Dynamic);
+        .set_content_arrangement(super_table::ContentArrangement::Dynamic);
 
     for row in table.row_iter_mut() {
         row.max_height(2);
@@ -180,7 +180,7 @@ fn table_with_composite_utf8_emojis() {
         .add_row(vec![
             "🙂‍↕️🙂‍↕️🙂‍↕️🙂‍↕️🙂‍↕️🙂‍↕️last_line.into_bytes().truncate(truncate_at)",
         ])
-        .set_content_arrangement(comfy_table::ContentArrangement::Dynamic);
+        .set_content_arrangement(super_table::ContentArrangement::Dynamic);
 
     for row in table.row_iter_mut() {
         row.max_height(1); // 2 -> also panics, 3 -> ok

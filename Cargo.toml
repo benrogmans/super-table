@@ -1,11 +1,11 @@
 [package]
-name = "comfy-table"
-description = "An easy to use library for building beautiful tables with automatic content wrapping"
-version = "7.2.1"
-authors = ["Arne Beer <contact@arne.beer>"]
-homepage = "https://github.com/nukesor/comfy-table"
-repository = "https://github.com/nukesor/comfy-table"
-documentation = "https://docs.rs/comfy-table/"
+name = "super-table"
+description = "Build beautiful tables. Supports content wrapping, alignment and cell spanning."
+version = "0.8.0"
+authors = ["Ben Rogmans <ben@amrai.nl>"]
+homepage = "https://github.com/benrogmans/super-table"
+repository = "https://github.com/benrogmans/super-table"
+documentation = "https://docs.rs/super-table/"
 license = "MIT"
 keywords = ["table", "terminal", "unicode"]
 readme = "README.md"
@@ -30,6 +30,7 @@ path = "examples/readme_table_no_tty.rs"
 [[example]]
 name = "readme_table"
 path = "examples/readme_table.rs"
+required-features = ["tty"]
 
 [[example]]
 name = "inner_style"
@@ -44,10 +45,10 @@ default = ["tty"]
 reexport_crossterm = ["tty"]
 tty = ["dep:crossterm"]
 # ---- DEVELOPMENT FLAGS ----
-# This flag is for comfy-table development debugging!
+# This flag is for super-table development debugging!
 # You usually don't need this as a user of the library.
 _debug = []
-# This feature is used to for integration testing of comfy_table.
+# This feature is used to for integration testing of super_table.
 # It exposes normally unexposed internal functionality for easier testing.
 # DON'T USE. You opt in for breaking changes, as the internal API might change on minor/patch versions.
 _integration_test = []

@@ -1,9 +1,9 @@
 use criterion::{Criterion, criterion_group, criterion_main};
 
-use comfy_table::presets::UTF8_FULL;
-use comfy_table::*;
 use rand::Rng;
 use rand::distr::Alphanumeric;
+use super_table::presets::UTF8_FULL;
+use super_table::*;
 
 /// Create a dynamic 10x500 Table with width 300 and unevenly distributed content.
 /// There are no constraint, the content simply has to be formatted to fit as good as possible into
@@ -17,16 +17,55 @@ fn build_huge_table() {
         .set_header(vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 
     let mut rng = rand::rng();
-    for _ in 0..500 {
+    for row_index in 0..500 {
         let mut row = Vec::new();
-        for _ in 0..10 {
-            let string_length = rng.random_range(2..100);
-            let random_string: String = (&mut rng)
-                .sample_iter(&Alphanumeric)
-                .take(string_length)
-                .map(char::from)
-                .collect();
-            row.push(random_string);
+        if row_index % 50 == 0 {
+            // Every 50 rows, add a colspan
+            let colspan = rng.random_range(2..4);
+            row.push(Cell::new(format!("Spans {} cols", colspan)).set_colspan(colspan));
+            for _ in colspan..10 {
+                let string_length = rng.random_range(2..100);
+                let random_string: String = (&mut rng)
+                    .sample_iter(&Alphanumeric)
+                    .take(string_length)
+                    .map(char::from)
+                    .collect();
+                row.push(Cell::new(random_string));
+            }
+        } else if row_index % 50 == 10 {
+            // Add a rowspan every 50 rows
+            let rowspan = rng.random_range(2..4);
+            row.push(Cell::new(format!("Spans {} rows", rowspan)).set_rowspan(rowspan));
+            for _ in 1..10 {
+                let string_length = rng.random_range(2..100);
+                let random_string: String = (&mut rng)
+                    .sample_iter(&Alphanumeric)
+                    .take(string_length)
+                    .map(char::from)
+                    .collect();
+                row.push(Cell::new(random_string));
+            }
+        } else if row_index % 50 > 10 && row_index % 50 < 13 {
+            // Skip first column due to rowspan above
+            for _ in 1..10 {
+                let string_length = rng.random_range(2..100);
+                let random_string: String = (&mut rng)
+                    .sample_iter(&Alphanumeric)
+                    .take(string_length)
+                    .map(char::from)
+                    .collect();
+                row.push(Cell::new(random_string));
+            }
+        } else {
+            for _ in 0..10 {
+                let string_length = rng.random_range(2..100);
+                let random_string: String = (&mut rng)
+                    .sample_iter(&Alphanumeric)
+                    .take(string_length)
+                    .map(char::from)
+                    .collect();
+                row.push(Cell::new(random_string));
+            }
         }
         table.add_row(row);
     }

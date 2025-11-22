@@ -1,9 +1,9 @@
 use criterion::{Criterion, criterion_group, criterion_main};
 
-use comfy_table::ColumnConstraint::*;
-use comfy_table::Width::*;
-use comfy_table::presets::UTF8_FULL;
-use comfy_table::*;
+use super_table::ColumnConstraint::*;
+use super_table::Width::*;
+use super_table::presets::UTF8_FULL;
+use super_table::*;
 
 /// Build the readme table
 #[cfg(feature = "tty")]
@@ -32,6 +32,19 @@ fn build_readme_table() {
                 Attribute::Bold,
                 Attribute::SlowBlink,
             ])
+        ])
+        .add_row(vec![
+            Cell::new("Spans 2 cols").set_colspan(2),
+            Cell::new("Normal cell"),
+        ])
+        .add_row(vec![
+            Cell::new("Spans 2 rows").set_rowspan(2),
+            Cell::new("Cell 2"),
+            Cell::new("Cell 3"),
+        ])
+        .add_row(vec![
+            Cell::new("Cell 2 (row 2)"),
+            Cell::new("Cell 3 (row 2)"),
         ]);
 
     // Build the table.
@@ -58,6 +71,19 @@ fn build_readme_table() {
             Cell::new("Blinky boi"),
             Cell::new("This table's content is dynamically arranged. The table is exactly 80 characters wide.\nHere comes a reallylongwordthatshoulddynamicallywrap"),
             Cell::new("COMBINE ALL THE THINGS"),
+        ])
+        .add_row(vec![
+            Cell::new("Spans 2 cols").set_colspan(2),
+            Cell::new("Normal cell"),
+        ])
+        .add_row(vec![
+            Cell::new("Spans 2 rows").set_rowspan(2),
+            Cell::new("Cell 2"),
+            Cell::new("Cell 3"),
+        ])
+        .add_row(vec![
+            Cell::new("Cell 2 (row 2)"),
+            Cell::new("Cell 3 (row 2)"),
         ]);
 
     // Build the table.
@@ -74,11 +100,30 @@ fn build_big_table() {
         .set_width(400)
         .set_header(vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 
-    // Create a 10x10 grid
+    // Create a 10x10 grid with some cell spans
     for row_index in 0..10 {
         let mut row = Vec::new();
-        for column in 0..10 {
-            row.push("SomeWord ".repeat((column + row_index * 2) % 10));
+        if row_index == 2 {
+            // Add a colspan in row 2
+            row.push(Cell::new("Spans 2 cols").set_colspan(2));
+            for column in 2..10 {
+                row.push(Cell::new("SomeWord ".repeat((column + row_index * 2) % 10)));
+            }
+        } else if row_index == 5 {
+            // Add a rowspan in row 5
+            row.push(Cell::new("Spans 2 rows").set_rowspan(2));
+            for column in 1..10 {
+                row.push(Cell::new("SomeWord ".repeat((column + row_index * 2) % 10)));
+            }
+        } else if row_index == 6 {
+            // Skip first column due to rowspan above
+            for column in 1..10 {
+                row.push(Cell::new("SomeWord ".repeat((column + row_index * 2) % 10)));
+            }
+        } else {
+            for column in 0..10 {
+                row.push(Cell::new("SomeWord ".repeat((column + row_index * 2) % 10)));
+            }
         }
         table.add_row(row);
     }

@@ -1,7 +1,7 @@
-/// Specify how comfy_table should arrange the content in your table.
+/// Specify how super_table should arrange the content in your table.
 ///
 /// ```
-/// use comfy_table::{Table, ContentArrangement};
+/// use super_table::{Table, ContentArrangement};
 ///
 /// let mut table = Table::new();
 /// table.set_content_arrangement(ContentArrangement::Dynamic);

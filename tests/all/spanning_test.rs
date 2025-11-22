@@ -1,6 +1,6 @@
 use pretty_assertions::assert_eq;
 
-use comfy_table::*;
+use super_table::*;
 
 #[test]
 fn simple_colspan() {
@@ -396,7 +396,7 @@ fn spans_with_column_constraints() {
         ]);
 
     // Set constraints on columns
-    use comfy_table::Width::Fixed;
+    use super_table::Width::Fixed;
     table
         .column_mut(0)
         .unwrap()
@@ -505,7 +505,7 @@ fn combined_spans_with_constraints() {
         ]);
 
     // Set constraints
-    use comfy_table::Width::Fixed;
+    use super_table::Width::Fixed;
     table
         .column_mut(0)
         .unwrap()
@@ -845,7 +845,7 @@ fn colspan_with_custom_borders() {
         ]);
 
     // Set custom border characters
-    use comfy_table::TableComponent::*;
+    use super_table::TableComponent::*;
     table
         .set_style(LeftBorder, '║')
         .set_style(RightBorder, '║')
@@ -888,7 +888,7 @@ fn rowspan_with_custom_separators() {
         ]);
 
     // Set custom separator characters
-    use comfy_table::TableComponent::*;
+    use super_table::TableComponent::*;
     table
         .set_style(RightBorder, '┤')
         .set_style(VerticalLines, '│')
@@ -923,7 +923,7 @@ fn combined_span_with_custom_borders_and_separators() {
         ]);
 
     // Set custom border and separator characters
-    use comfy_table::TableComponent::*;
+    use super_table::TableComponent::*;
     table
         .set_style(LeftBorder, '│')
         .set_style(RightBorder, '│')

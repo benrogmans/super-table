@@ -1,7 +1,7 @@
 use ::proptest::prelude::*;
-use comfy_table::ColumnConstraint::*;
-use comfy_table::Width::*;
-use comfy_table::*;
+use super_table::ColumnConstraint::*;
+use super_table::Width::*;
+use super_table::*;
 
 /// Pick any of the three existing ContentArrangement types for the table.
 fn content_arrangement() -> impl Strategy<Value = ContentArrangement> {
@@ -217,7 +217,7 @@ proptest! {
 
         #[cfg(feature = "_integration_test")]
         // Only run this test, if the `integration_test` is enabled.
-        // Without this flag, we don't have access to some util functions in comfy_table, that
+        // Without this flag, we don't have access to some util functions in super_table, that
         // aren't exposed by default.
         enforce_constraints(&table, formatted, lines)?
     }
@@ -233,7 +233,7 @@ fn build_error(table: &str, context: &str) -> Result<(), TestCaseError> {
 /// by specifying [ColumnConstraint]s.
 #[cfg(feature = "_integration_test")]
 fn determine_max_table_width(table: &Table) -> u16 {
-    use comfy_table::utils::arrangement::helper::count_border_columns;
+    use super_table::utils::arrangement::helper::count_border_columns;
     let table_width = table.width().unwrap();
 
     // The max value that will be enforced by constraints.
@@ -441,7 +441,7 @@ fn enforce_constraints(
 /// Resolve an absolute value from a given boundary
 #[cfg(feature = "_integration_test")]
 pub fn absolute_width(table: &Table, width: &Width) -> u16 {
-    use comfy_table::utils::arrangement::constraint::absolute_value_from_width;
+    use super_table::utils::arrangement::constraint::absolute_value_from_width;
 
     let visible_columns = table
         .column_iter()

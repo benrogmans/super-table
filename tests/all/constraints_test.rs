@@ -1,7 +1,7 @@
-use comfy_table::ColumnConstraint::*;
-use comfy_table::Width::*;
-use comfy_table::*;
 use pretty_assertions::assert_eq;
+use super_table::ColumnConstraint::*;
+use super_table::Width::*;
+use super_table::*;
 
 use super::assert_table_line_width;
 
