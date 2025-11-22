@@ -1,7 +1,7 @@
 [package]
 name = "super-table"
 description = "Build beautiful tables. Supports content wrapping, alignment and cell spanning."
-version = "0.8.0"
+version = "1.0.0"
 authors = ["Ben Rogmans <ben@amrai.nl>"]
 homepage = "https://github.com/benrogmans/super-table"
 repository = "https://github.com/benrogmans/super-table"
