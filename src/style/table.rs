@@ -61,6 +61,15 @@ pub enum TableComponent {
     RightBorderIntersections,
     TopBorderIntersections,
     BottomBorderIntersections,
+    /// Used at the bottom border where a colspan cell merges columns above.
+    /// Typically renders as '─' to create a continuous line instead of '┴'.
+    BottomBorderColspanIntersections,
+    /// Used at the header separator where a colspan or rowspan starts in the row below.
+    /// This character should have a top connector (to vertical line in header) and
+    /// horizontal continuation, but no bottom connector since the column boundary
+    /// does not continue into the data rows.
+    /// Typically renders as '╧' for UTF-8 (up single and horizontal double) or '=' for ASCII.
+    MiddleHeaderMergeIntersection,
     TopLeftCorner,
     TopRightCorner,
     BottomLeftCorner,
@@ -68,7 +77,7 @@ pub enum TableComponent {
 }
 
 impl TableComponent {
-    const fn components() -> [TableComponent; 19] {
+    const fn components() -> [TableComponent; 21] {
         [
             TableComponent::LeftBorder,
             TableComponent::RightBorder,
@@ -85,6 +94,8 @@ impl TableComponent {
             TableComponent::RightBorderIntersections,
             TableComponent::TopBorderIntersections,
             TableComponent::BottomBorderIntersections,
+            TableComponent::BottomBorderColspanIntersections,
+            TableComponent::MiddleHeaderMergeIntersection,
             TableComponent::TopLeftCorner,
             TableComponent::TopRightCorner,
             TableComponent::BottomLeftCorner,

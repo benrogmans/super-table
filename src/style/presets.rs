@@ -9,7 +9,7 @@
 /// | c     | d     |
 /// +-------+-------+
 /// ```
-pub const ASCII_FULL: &str = "||--+==+|-+||++++++";
+pub const ASCII_FULL: &str = "||--+==+|-+||++-=++++++";
 
 /// Just like ASCII_FULL, but without dividers between rows.
 ///
@@ -20,7 +20,7 @@ pub const ASCII_FULL: &str = "||--+==+|-+||++++++";
 /// | a     | b     |
 /// | c     | d     |
 /// +-------+-------+
-pub const ASCII_FULL_CONDENSED: &str = "||--+==+|    ++++++";
+pub const ASCII_FULL_CONDENSED: &str = "||--+==+|    ++-=++++++";
 
 /// Just like ASCII_FULL, but without any borders.
 ///
@@ -31,7 +31,7 @@ pub const ASCII_FULL_CONDENSED: &str = "||--+==+|    ++++++";
 /// -------+-------
 ///  c     | d
 /// ```
-pub const ASCII_NO_BORDERS: &str = "     == |-+        ";
+pub const ASCII_NO_BORDERS: &str = "     == |-+     =     ";
 
 /// Just like ASCII_FULL, but without vertical/horizontal middle lines.
 ///
@@ -44,7 +44,7 @@ pub const ASCII_NO_BORDERS: &str = "     == |-+        ";
 /// | c       d     |
 /// +---------------+
 /// ```
-pub const ASCII_BORDERS_ONLY: &str = "||--+==+   ||--++++";
+pub const ASCII_BORDERS_ONLY: &str = "||--+==+   ||---=++++++";
 
 /// Just like ASCII_BORDERS_ONLY, but without spacing between rows.
 ///
@@ -56,7 +56,7 @@ pub const ASCII_BORDERS_ONLY: &str = "||--+==+   ||--++++";
 /// | c       d     |
 /// +---------------+
 /// ```
-pub const ASCII_BORDERS_ONLY_CONDENSED: &str = "||--+==+     --++++";
+pub const ASCII_BORDERS_ONLY_CONDENSED: &str = "||--+==+     ---=++++++";
 
 /// Just like ASCII_FULL, but without vertical/horizontal middle lines and no side borders.
 ///
@@ -69,7 +69,7 @@ pub const ASCII_BORDERS_ONLY_CONDENSED: &str = "||--+==+     --++++";
 ///  c       d
 /// ---------------
 /// ```
-pub const ASCII_HORIZONTAL_ONLY: &str = "  -- ==  --  --    ";
+pub const ASCII_HORIZONTAL_ONLY: &str = "  -- ==  --  ---=     ";
 
 /// Markdown like table styles.
 ///
@@ -79,7 +79,7 @@ pub const ASCII_HORIZONTAL_ONLY: &str = "  -- ==  --  --    ";
 /// | a     | b     |
 /// | c     | d     |
 /// ```
-pub const ASCII_MARKDOWN: &str = "||  |-|||           ";
+pub const ASCII_MARKDOWN: &str = "||  |-|||       -      ";
 
 /// The UTF8 enabled version of the default style for tables.\
 /// Quite beautiful isn't it? It's drawn with UTF8's box drawing characters.
@@ -93,7 +93,7 @@ pub const ASCII_MARKDOWN: &str = "||  |-|||           ";
 /// │ c     ┆ d     │
 /// └───────┴───────┘
 /// ```
-pub const UTF8_FULL: &str = "││──╞═╪╡┆╌┼├┤┬┴┌┐└┘";
+pub const UTF8_FULL: &str = "││──╞═╪╡┆╌┼├┤┬┴─╧┌┐└┘";
 
 /// Default UTF8 style, but without dividers between rows.
 ///
@@ -105,7 +105,7 @@ pub const UTF8_FULL: &str = "││──╞═╪╡┆╌┼├┤┬┴┌┐
 /// │ c     ┆ d     │
 /// └───────┴───────┘
 /// ```
-pub const UTF8_FULL_CONDENSED: &str = "││──╞═╪╡┆    ┬┴┌┐└┘";
+pub const UTF8_FULL_CONDENSED: &str = "││──╞═╪╡┆    ┬┴─╧┌┐└┘";
 
 /// Default UTF8 style, but without any borders.
 ///
@@ -116,7 +116,7 @@ pub const UTF8_FULL_CONDENSED: &str = "││──╞═╪╡┆    ┬┴┌�
 /// ╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌
 ///  c     ┆ d
 /// ```
-pub const UTF8_NO_BORDERS: &str = "     ═╪ ┆╌┼        ";
+pub const UTF8_NO_BORDERS: &str = "     ═╪ ┆╌┼     ╧     ";
 
 /// Just like the UTF8_FULL style, but without vertical/horizontal middle lines.
 ///
@@ -128,7 +128,7 @@ pub const UTF8_NO_BORDERS: &str = "     ═╪ ┆╌┼        ";
 /// │ c       d     │
 /// └───────────────┘
 /// ```
-pub const UTF8_BORDERS_ONLY: &str = "││──╞══╡     ──┌┐└┘";
+pub const UTF8_BORDERS_ONLY: &str = "││──╞══╡     ───═┌┐└┘";
 
 /// Only display vertical lines.
 ///
@@ -141,7 +141,7 @@ pub const UTF8_BORDERS_ONLY: &str = "││──╞══╡     ──┌┐�
 ///  c       d
 /// ───────────────
 /// ```
-pub const UTF8_HORIZONTAL_ONLY: &str = "  ── ══  ──  ──    ";
+pub const UTF8_HORIZONTAL_ONLY: &str = "  ── ══  ──  ───═     ";
 
 /// Don't draw any borders or other lines.
 /// Useful, if you want to simply organize some data without any cosmetics.
@@ -151,4 +151,4 @@ pub const UTF8_HORIZONTAL_ONLY: &str = "  ── ══  ──  ──    ";
 ///  a      b
 ///  c      d
 /// ```
-pub const NOTHING: &str = "                   ";
+pub const NOTHING: &str = "                      ";

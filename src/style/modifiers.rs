@@ -8,7 +8,7 @@
 /// │ c     ┆ d     │
 /// ╰───────┴───────╯
 /// ```
-pub const UTF8_ROUND_CORNERS: &str = "               ╭╮╰╯";
+pub const UTF8_ROUND_CORNERS: &str = "                 ╭╮╰╯";
 
 /// A modifier, that when applied will convert the inner borders to solid lines.
 /// ```text
@@ -20,4 +20,4 @@ pub const UTF8_ROUND_CORNERS: &str = "               ╭╮╰╯";
 /// │ c     │ d     │
 /// ╰───────┴───────╯
 /// ```
-pub const UTF8_SOLID_INNER_BORDERS: &str = "        │─         ";
+pub const UTF8_SOLID_INNER_BORDERS: &str = "        │─           ";

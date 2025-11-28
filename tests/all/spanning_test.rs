@@ -16,11 +16,11 @@ fn simple_colspan() {
         ]);
 
     let expected = "
-+----------+----------+-------------+
++---------------------+-------------+
 | Header1             | Header3     |
 +===================================+
 | Spans 2 cols        | Normal cell |
-+----------+----------+-------------+";
++---------------------+-------------+";
     assert_eq!(expected, "\n".to_string() + &table.to_string());
 }
 
@@ -45,7 +45,7 @@ fn simple_rowspan() {
 | Header1      | Header2        | Header3        |
 +================================================+
 | Spans 2 rows | Cell 2         | Cell 3         |
-|              +----------------+----------------|
+|              |----------------+----------------|
 |              | Cell 2 (row 2) | Cell 3 (row 2) |
 +--------------+----------------+----------------+";
     assert_eq!(expected, "\n".to_string() + &table.to_string());
@@ -72,9 +72,9 @@ fn combined_colspan_rowspan() {
 | Header1 | Header2 | Header3        | Header4        |
 +=====================================================+
 | Spans 2x2         | Cell 3         | Cell 4         |
-|                   +----------------+----------------|
+|                   |----------------+----------------|
 |                   | Cell 3 (row 2) | Cell 4 (row 2) |
-+---------+---------+----------------+----------------+";
++-------------------+----------------+----------------+";
     assert_eq!(expected, "\n".to_string() + &table.to_string());
 }
 
@@ -94,7 +94,7 @@ fn multiple_spans_in_row() {
 | H1   | H2   | H3     | H4   | H5   |
 +====================================+
 | Span 2      | Normal | Span 2      |
-+------+------+--------+------+------+";
++-------------+--------+-------------+";
     assert_eq!(expected, "\n".to_string() + &table.to_string());
 }
 
@@ -118,7 +118,7 @@ fn spans_in_header() {
         ]);
 
     let expected = "
-+-----------+-----------+---------+
++-----------------------+---------+
 | Header spans 2        | Header3 |
 +=================================+
 | Cell 1    | Cell 2    | Cell 3  |
@@ -206,7 +206,7 @@ fn spans_with_styling() {
 | H1      | H2     | H3     |
 +===========================+
 | Styled span      | Normal |
-+---------+--------+--------+";
++------------------+--------+";
     assert_eq!(expected, "\n".to_string() + &table.to_string());
 }
 
@@ -222,7 +222,7 @@ fn span_at_table_boundaries() {
 | H1     | H2    |
 +================+
 | Spans all      |
-+--------+-------+";
++----------------+";
     assert_eq!(expected, "\n".to_string() + &table.to_string());
 }
 
@@ -238,7 +238,7 @@ fn large_colspan() {
 | H1  | H2  | H3  | H4  | H5 |
 +============================+
 | Spans 5 cols               |
-+-----+-----+-----+-----+----+";
++----------------------------+";
     assert_eq!(expected, "\n".to_string() + &table.to_string());
 }
 
@@ -268,9 +268,9 @@ fn large_rowspan() {
 | H1           | H2             | H3             |
 +================================================+
 | Spans 3 rows | Cell 2         | Cell 3         |
-|              +----------------+----------------|
+|              |----------------+----------------|
 |              | Cell 2 (row 2) | Cell 3 (row 2) |
-|              +----------------+----------------|
+|              |----------------+----------------|
 |              | Cell 2 (row 3) | Cell 3 (row 3) |
 +--------------+----------------+----------------+";
     assert_eq!(expected, "\n".to_string() + &table.to_string());
@@ -299,7 +299,7 @@ fn rowspan_with_multiline() {
 | Multi   | Cell 2         | Cell 3         |
 | line    |                |                |
 | rowspan |                |                |
-|         +----------------+----------------|
+|         |----------------+----------------|
 |         | Cell 2 (row 2) | Cell 3 (row 2) |
 +---------+----------------+----------------+";
     assert_eq!(expected, "\n".to_string() + &table.to_string());
@@ -330,7 +330,7 @@ fn complex_table_with_multiple_spans() {
 | Header 1-2                     | Header 3-4        |
 +====================================================+
 | Rowspan 1-2  | Cell 2          | Colspan 2         |
-|              +-----------------+-------------------|
+|              |-----------------+-------------------|
 |              | Cell 2 (row 2)  | Cell 3  | Cell 4  |
 +--------------+-----------------+---------+---------+";
     assert_eq!(expected, "\n".to_string() + &table.to_string());
@@ -378,7 +378,7 @@ fn spans_with_dynamic_arrangement() {
 +==================================+
 | Spans 2 cols with long | Normal  |
 | content                |         |
-+--------------+---------+---------+";
++------------------------+---------+";
     assert_eq!(expected, "\n".to_string() + &table.to_string());
 }
 
@@ -411,12 +411,12 @@ fn spans_with_column_constraints() {
         .set_constraint(ColumnConstraint::Absolute(Fixed(8)));
 
     let expected = "
-+----------+----------+--------+
++---------------------+--------+
 | Header 1-2          | Header |
 |                     | 3      |
 +==============================+
 | Spans 2 cols        | Normal |
-+----------+----------+--------+";
++---------------------+--------+";
     assert_eq!(expected, "\n".to_string() + &table.to_string());
 }
 
@@ -478,7 +478,7 @@ fn rowspan_with_dynamic_arrangement() {
 | Header1      | Header2        | Header3        |
 +================================================+
 | Spans 2 rows | Cell 2         | Cell 3         |
-|              +----------------+----------------|
+|              |----------------+----------------|
 |              | Cell 2 (row 2) | Cell 3 (row 2) |
 +--------------+----------------+----------------+";
     assert_eq!(expected, "\n".to_string() + &table.to_string());
@@ -520,10 +520,10 @@ fn combined_spans_with_constraints() {
 | H1     | H2    | H3       | H4             |
 +============================================+
 | 2x2 span       | Cell 3   | Cell 4         |
-|                +----------+----------------|
+|                |----------+----------------|
 |                | Cell 3   | Cell 4 (row 2) |
 |                | (row 2)  |                |
-+--------+-------+----------+----------------+";
++----------------+----------+----------------+";
     assert_eq!(expected, "\n".to_string() + &table.to_string());
 }
 
@@ -571,15 +571,15 @@ fn rowspan_with_alignment() {
 | H1     | H2             | H3             |
 +==========================================+
 | Left   | Cell 2         | Cell 3         |
-|        +----------------+----------------|
+|        |----------------+----------------|
 |        | Cell 2 (row 2) | Cell 3 (row 2) |
 |--------+----------------+----------------|
 | Center | Cell 2         | Cell 3         |
-|        +----------------+----------------|
+|        |----------------+----------------|
 |        | Cell 2 (row 2) | Cell 3 (row 2) |
 |--------+----------------+----------------|
 |  Right | Cell 2         | Cell 3         |
-|        +----------------+----------------|
+|        |----------------+----------------|
 |        | Cell 2 (row 2) | Cell 3 (row 2) |
 +--------+----------------+----------------+";
     assert_eq!(expected, "\n".to_string() + &table.to_string());
@@ -620,13 +620,13 @@ fn combined_span_with_alignment() {
 | H1     | H2     | H3             | H4             |
 +===================================================+
 | Left 2x2        | Cell 3         | Cell 4         |
-|                 +----------------+----------------|
+|                 |----------------+----------------|
 |                 | Cell 3 (row 2) | Cell 4 (row 2) |
-|--------+--------+----------------+----------------|
+|-----------------+----------------+----------------|
 |    Center 2x2   | Cell 3         | Cell 4         |
-|                 +----------------+----------------|
+|                 |----------------+----------------|
 |                 | Cell 3 (row 2) | Cell 4 (row 2) |
-+--------+--------+----------------+----------------+";
++-----------------+----------------+----------------+";
     assert_eq!(expected, "\n".to_string() + &table.to_string());
 }
 
@@ -667,11 +667,11 @@ fn rowspan_with_styling() {
 | H1       | H2             | H3             |
 +============================================+
 | Red Bold | Cell 2         | Cell 3         |
-|          +----------------+----------------|
+|          |----------------+----------------|
 |          | Cell 2 (row 2) | Cell 3 (row 2) |
 |----------+----------------+----------------|
 | Green BG | Cell 2         | Cell 3         |
-|          +----------------+----------------|
+|          |----------------+----------------|
 |          | Cell 2 (row 2) | Cell 3 (row 2) |
 +----------+----------------+----------------+";
     assert_eq!(expected, "\n".to_string() + &table.to_string());
@@ -704,9 +704,9 @@ fn combined_span_with_styling() {
 | H1     | H2     | H3             | H4             |
 +===================================================+
 | Styled 2x2      | Cell 3         | Cell 4         |
-|                 +----------------+----------------|
+|                 |----------------+----------------|
 |                 | Cell 3 (row 2) | Cell 4 (row 2) |
-+--------+--------+----------------+----------------+";
++-----------------+----------------+----------------+";
     assert_eq!(expected, "\n".to_string() + &table.to_string());
 }
 
@@ -734,7 +734,7 @@ fn colspan_with_column_alignment() {
 |    H1   |      H2 | H3     | H4     |
 +=====================================+
 |    Spans 2 cols   | Cell 3 | Cell 4 |
-+---------+---------+--------+--------+";
++-------------------+--------+--------+";
     assert_eq!(expected, "\n".to_string() + &table.to_string());
 }
 
@@ -756,7 +756,7 @@ fn multiple_styled_spans() {
 | H1  | H2 | H3   | H4  | H5   |
 +==============================+
 | Red      | Green      | Blue |
-+-----+----+------+-----+------+";
++----------+------------+------+";
     assert_eq!(expected, "\n".to_string() + &table.to_string());
 }
 
@@ -794,7 +794,7 @@ fn span_with_multiple_attributes() {
 | Bold Underlined               | Normal         |
 |-------------------------------+----------------|
 | Blink Italic | Cell 2         | Cell 3         |
-|              +----------------+----------------|
+|              |----------------+----------------|
 |              | Cell 2 (row 2) | Cell 3 (row 2) |
 +--------------+----------------+----------------+";
     assert_eq!(expected, "\n".to_string() + &table.to_string());
@@ -827,7 +827,7 @@ fn span_with_alignment_and_multiline() {
 |----------------+-------|
 |     Center     | Right |
 |    Multiline   |       |
-+--------+-------+-------+";
++----------------+-------+";
     assert_eq!(expected, "\n".to_string() + &table.to_string());
 }
 
@@ -861,14 +861,15 @@ fn colspan_with_custom_borders() {
         .set_style(BottomBorderIntersections, '╩')
         .set_style(LeftHeaderIntersection, '╠')
         .set_style(RightHeaderIntersection, '╣')
-        .set_style(MiddleHeaderIntersections, '╬');
+        .set_style(MiddleHeaderIntersections, '╬')
+        .set_style(BottomBorderColspanIntersections, '═');
 
     let expected = "
-╔══════════╦══════════╦═════════╗
+╔═════════════════════╦═════════╗
 ║ Header1             ║ Header3 ║
 ╠═════════════════════╬═════════╣
 ║ Spans 2 cols        ║ Normal  ║
-╚══════════╩══════════╩═════════╝";
+╚═════════════════════╩═════════╝";
     assert_eq!(expected, "\n".to_string() + &table.to_string());
 }
 
@@ -901,7 +902,7 @@ fn rowspan_with_custom_separators() {
 | H1           │ H2             │ H3             ┤
 +================================================+
 | Spans 2 rows │ Cell 2         │ Cell 3         ┤
-├              ┼----------------┼----------------┤
+|              ├----------------┼----------------┤
 |              │ Cell 2 (row 2) │ Cell 3 (row 2) ┤
 +--------------+----------------+----------------+";
     assert_eq!(expected, "\n".to_string() + &table.to_string());
@@ -942,15 +943,17 @@ fn combined_span_with_custom_borders_and_separators() {
         .set_style(RightBorderIntersections, '┤')
         .set_style(LeftHeaderIntersection, '╞')
         .set_style(RightHeaderIntersection, '╡')
-        .set_style(MiddleHeaderIntersections, '╪');
+        .set_style(MiddleHeaderIntersections, '╪')
+        .set_style(MiddleHeaderMergeIntersection, '╧')
+        .set_style(BottomBorderColspanIntersections, '─');
 
     let expected = "
 ┌───────┬───────┬────────────────┬────────────────┐
 │ H1    │ H2    │ H3             │ H4             │
-╞═══════╪═══════╪════════════════╪════════════════╡
+╞═══════╧═══════╪════════════════╪════════════════╡
 │ 2x2 span      │ Cell 3         │ Cell 4         │
-├               ┼----------------┼----------------┤
+│               ├----------------┼----------------┤
 │               │ Cell 3 (row 2) │ Cell 4 (row 2) │
-└───────┴───────┴────────────────┴────────────────┘";
+└───────────────┴────────────────┴────────────────┘";
     assert_eq!(expected, "\n".to_string() + &table.to_string());
 }
