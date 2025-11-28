@@ -149,11 +149,7 @@ pub(crate) fn draw_borders(
             .last()
             .and_then(|row| row.first().map(|line| line.as_slice()));
         // Calculate the last row index for rowspan detection
-        let last_row_index = if rows.is_empty() {
-            0
-        } else {
-            rows.len() - 1
-        };
+        let last_row_index = if rows.is_empty() { 0 } else { rows.len() - 1 };
         lines.push(draw_bottom_border(
             table,
             display_info,
@@ -282,9 +278,9 @@ fn draw_rows(
                 // Header separator should match the header content width (widest line)
                 // Draw all physical columns separately (like top border)
                 // Get next row's first line to detect colspan transitions
-                let next_row_line = row_iter.peek().and_then(|(_, next_row)| {
-                    next_row.first().map(|line| line.as_slice())
-                });
+                let next_row_line = row_iter
+                    .peek()
+                    .and_then(|(_, next_row)| next_row.first().map(|line| line.as_slice()));
                 lines.push(draw_horizontal_lines(
                     table,
                     display_info,
@@ -306,6 +302,7 @@ fn draw_rows(
                             cell.rowspan(),
                             cell.colspan(),
                             None,
+                            crate::style::VerticalAlignment::Top,
                         );
                     }
                     col_index += cell.colspan() as usize;
@@ -337,6 +334,7 @@ fn draw_rows(
                         cell.rowspan(),
                         cell.colspan(),
                         None,
+                        crate::style::VerticalAlignment::Top,
                     );
                 }
                 col_index += cell.colspan() as usize;
@@ -436,7 +434,11 @@ fn draw_horizontal_lines(
     // Draw left border/intersection
     if should_draw_left_border(table) {
         let first_visible = column_infos.iter().find(|c| !c.is_hidden);
-        if !header && first_visible.map(|c| c.is_rowspan_continuing).unwrap_or(false) {
+        if !header
+            && first_visible
+                .map(|c| c.is_rowspan_continuing)
+                .unwrap_or(false)
+        {
             line += &styles.left_border;
             previous_was_rowspan = true;
         } else {
@@ -458,9 +460,9 @@ fn draw_horizontal_lines(
 
         // Case 1: Continuing rowspan - draw spaces
         if col.is_rowspan_continuing {
-            let start_col = col.rowspan_start_col.expect(
-                "rowspan_start_col must be Some when is_rowspan_continuing is true"
-            );
+            let start_col = col
+                .rowspan_start_col
+                .expect("rowspan_start_col must be Some when is_rowspan_continuing is true");
             let (spaces, cols_consumed) =
                 draw_rowspan_space(display_info, start_col, col.rowspan_colspan);
             line += &spaces;
@@ -472,9 +474,9 @@ fn draw_horizontal_lines(
 
         // Case 2: Ending rowspan - draw merged border
         if col.is_rowspan_ending {
-            let start_col = col.ending_rowspan_start_col.expect(
-                "ending_rowspan_start_col must be Some when is_rowspan_ending is true"
-            );
+            let start_col = col
+                .ending_rowspan_start_col
+                .expect("ending_rowspan_start_col must be Some when is_rowspan_ending is true");
             let (border, cols_consumed) = draw_ending_rowspan_border(
                 display_info,
                 &column_infos,
@@ -510,7 +512,9 @@ fn draw_horizontal_lines(
                 colspan_count += 1;
                 continue;
             }
-            if next.is_colspan_continuation && !next.is_rowspan_continuing && !next.is_rowspan_ending
+            if next.is_colspan_continuation
+                && !next.is_rowspan_continuing
+                && !next.is_rowspan_ending
             {
                 total_width += 1 + next.width; // +1 for merged separator
                 colspan_count += 1;
@@ -565,8 +569,7 @@ impl BorderStyles {
                     .style_or_default(TableComponent::MiddleHeaderMergeIntersection),
                 left_border_intersection: table
                     .style_or_default(TableComponent::LeftBorderIntersections),
-                right_intersection: table
-                    .style_or_default(TableComponent::RightHeaderIntersection),
+                right_intersection: table.style_or_default(TableComponent::RightHeaderIntersection),
             }
         } else {
             Self {
@@ -654,7 +657,9 @@ fn draw_ending_rowspan_border(
     }
 
     // Draw first column border
-    result += &styles.horizontal.repeat(display_info[visible_cols[0]].width().into());
+    result += &styles
+        .horizontal
+        .repeat(display_info[visible_cols[0]].width().into());
 
     // Draw remaining columns with continuous horizontal lines (merged)
     for &col in &visible_cols[1..] {
@@ -676,7 +681,8 @@ fn draw_bottom_border(
     let bottom_border = table.style_or_default(TableComponent::BottomBorder);
     let intersection = table.style_or_default(TableComponent::BottomBorderIntersections);
     let right_corner = table.style_or_default(TableComponent::BottomRightCorner);
-    let merge_intersection = table.style_or_default(TableComponent::BottomBorderColspanIntersections);
+    let merge_intersection =
+        table.style_or_default(TableComponent::BottomBorderColspanIntersections);
 
     let (header_colspan_continuation, _) =
         build_colspan_continuation_map(table.header.as_ref(), display_info.len());
@@ -737,12 +743,10 @@ fn draw_bottom_border(
             // Check if this column is a header colspan continuation
             let is_header_colspan = col_index < header_colspan_continuation.len()
                 && header_colspan_continuation[col_index];
-            
+
             // Check if this column is a last row colspan continuation
             let is_lastrow_colspan = last_row_line
-                .map(|parts| {
-                    visible_col_index < parts.len() && parts[visible_col_index].is_empty()
-                })
+                .map(|parts| visible_col_index < parts.len() && parts[visible_col_index].is_empty())
                 .unwrap_or(false);
 
             // Merge if last row has colspan AND (header also has colspan OR table has few rows)

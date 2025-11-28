@@ -8,7 +8,7 @@ use super::content_split::split_line;
 
 use crate::cell::Cell;
 use crate::row::Row;
-use crate::style::CellAlignment;
+use crate::style::{CellAlignment, VerticalAlignment};
 #[cfg(feature = "tty")]
 use crate::style::{map_attribute, map_color};
 use crate::table::Table;
@@ -93,6 +93,8 @@ pub(crate) fn format_row(
     let mut temp_row_content: Vec<Option<Vec<String>>> = vec![None; display_infos.len()];
     // Track which columns are part of a colspan (maps col_index -> colspan)
     let mut colspan_map: Vec<Option<usize>> = vec![None; display_infos.len()];
+    // Track vertical alignment for each column (for applying after we know max_lines)
+    let mut vertical_alignments: Vec<Option<VerticalAlignment>> = vec![None; display_infos.len()];
     let mut col_index = 0;
 
     // Process each cell in the row
@@ -150,6 +152,9 @@ pub(crate) fn format_row(
             delimiter: spanned_infos[0].delimiter,
             content_width: combined_content_width,
             cell_alignment: cell.alignment.or(spanned_infos[0].cell_alignment),
+            vertical_alignment: cell
+                .vertical_alignment
+                .or(spanned_infos[0].vertical_alignment),
             is_hidden: false,
         };
 
@@ -288,11 +293,31 @@ pub(crate) fn format_row(
             .map(|line| align_line(table, &spanned_info, cell, line.to_string()))
             .collect();
 
-        // Store the formatted cell content in the first column position
-        // For colspan > 1, mark all spanned columns
+        // Track vertical alignment for this cell
+        // Cell setting overrides column setting, default is Top
+        let v_align = cell
+            .vertical_alignment
+            .or(spanned_infos[0].vertical_alignment)
+            .unwrap_or(VerticalAlignment::Top);
+        vertical_alignments[col_index] = Some(v_align);
+
+        // Store content in temp_row_content for this row
         // Clone for rowspan registration if needed
         let content_for_storage = aligned_cell_lines.clone();
         temp_row_content[col_index] = Some(aligned_cell_lines);
+
+        // Register rowspan if needed, caching the formatted content for subsequent rows
+        if rowspan > 1 {
+            span_tracker.register_rowspan(
+                row_index,
+                col_index,
+                rowspan,
+                colspan as u16,
+                Some(content_for_storage),
+                v_align,
+            );
+        }
+
         for i in 0..colspan {
             if col_index + i < colspan_map.len() {
                 if i == 0 {
@@ -301,17 +326,6 @@ pub(crate) fn format_row(
                     colspan_map[col_index + i] = Some(0); // Mark as spanned (0 means part of colspan)
                 }
             }
-        }
-
-        // Register rowspan if needed, caching the formatted content
-        if rowspan > 1 {
-            span_tracker.register_rowspan(
-                row_index,
-                col_index,
-                rowspan,
-                colspan as u16,
-                Some(content_for_storage),
-            );
         }
 
         // Advance column index by colspan
@@ -336,6 +350,36 @@ pub(crate) fn format_row(
         .max()
         .unwrap_or(0);
 
+    // Apply vertical alignment to each cell
+    for (col_idx, cell_content) in temp_row_content.iter_mut().enumerate() {
+        if let Some(lines) = cell_content {
+            let v_align = vertical_alignments[col_idx].unwrap_or(VerticalAlignment::Top);
+            let content_height = lines.len();
+            if content_height < max_lines {
+                // Calculate the width for empty lines
+                // For colspan cells, need to calculate combined width
+                let colspan = colspan_map[col_idx].unwrap_or(1);
+                let line_width = if colspan > 1 {
+                    // Colspan cell - calculate combined width
+                    let visible_cols: Vec<&ColumnDisplayInfo> = display_infos
+                        [col_idx..(col_idx + colspan).min(display_infos.len())]
+                        .iter()
+                        .filter(|info| !info.is_hidden)
+                        .collect();
+                    let width_sum: usize =
+                        visible_cols.iter().map(|info| info.width() as usize).sum();
+                    let visible_colspan_count = visible_cols.len();
+                    width_sum + visible_colspan_count.saturating_sub(1)
+                } else {
+                    // Normal cell - use column width
+                    display_infos[col_idx].width() as usize
+                };
+                let empty_line = " ".repeat(line_width);
+                *lines = apply_vertical_alignment(lines.clone(), max_lines, v_align, empty_line);
+            }
+        }
+    }
+
     let mut row_content = Vec::with_capacity(max_lines);
 
     // Build the row content line by line
@@ -349,51 +393,50 @@ pub(crate) fn format_row(
                 continue;
             }
 
-            // Check if this position is occupied by a rowspan from above
-            // Rowspan content should ONLY appear in the FIRST row where it starts
-            // Subsequent rows should have empty space where the rowspan is
+            // Check if this position is occupied by a rowspan from a PREVIOUS row
+            // Starting row content is handled through temp_row_content
             if let Some((start_row, start_col, colspan)) =
                 span_tracker.get_rowspan_start(row_index, current_col)
             {
-                // This is a rowspan position from a previous row
-                // Only show content if this IS the starting row, otherwise show empty space
-                if start_row == row_index {
-                    // This is the starting row, get the cached formatted content
-                    if let Some(cached_content) =
-                        span_tracker.get_rowspan_content(row_index, start_col)
-                    {
-                        // Use the cached formatted content
+                // Calculate combined width for this rowspan
+                let spanned_infos: Vec<&ColumnDisplayInfo> = display_infos
+                    .iter()
+                    .skip(start_col)
+                    .take(colspan as usize)
+                    .filter(|info| !info.is_hidden)
+                    .collect();
+                let width_sum: usize = spanned_infos.iter().map(|info| info.width() as usize).sum();
+                let combined_width = width_sum + (colspan as usize - 1);
+                let empty_line = " ".repeat(combined_width);
+
+                // Get content and calculate display position based on vertical alignment
+                if let Some(cached_content) = span_tracker.get_rowspan_content(row_index, start_col)
+                {
+                    let content_height = cached_content.len();
+                    let row_within_span = row_index - start_row;
+                    let content_offset = span_tracker.get_rowspan_content_offset(
+                        start_row,
+                        start_col,
+                        content_height,
+                    );
+
+                    // Check if this row should show content based on vertical alignment
+                    // Content is shown starting at row `content_offset` within the span
+                    if row_within_span == content_offset {
+                        // This row shows the content - display the appropriate line
                         if let Some(content) = cached_content.get(line_index) {
                             line.push(content.clone());
                         } else {
-                            // Empty line for rowspan - calculate combined width
-                            let spanned_infos: Vec<&ColumnDisplayInfo> = display_infos
-                                .iter()
-                                .skip(start_col)
-                                .take(colspan as usize)
-                                .filter(|info| !info.is_hidden)
-                                .collect();
-                            let width_sum: usize =
-                                spanned_infos.iter().map(|info| info.width() as usize).sum();
-                            let combined_width = width_sum + (colspan as usize - 1); // Add separator compensation
-                            line.push(" ".repeat(combined_width));
+                            // More lines in this row than content has
+                            line.push(empty_line.clone());
                         }
                     } else {
-                        // Fallback: empty string if content not found
-                        line.push("".to_string());
+                        // This row is padding (before or after content based on alignment)
+                        line.push(empty_line.clone());
                     }
                 } else {
-                    // This is NOT the starting row - show empty space
-                    let spanned_infos: Vec<&ColumnDisplayInfo> = display_infos
-                        .iter()
-                        .skip(start_col)
-                        .take(colspan as usize)
-                        .filter(|info| !info.is_hidden)
-                        .collect();
-                    let width_sum: usize =
-                        spanned_infos.iter().map(|info| info.width() as usize).sum();
-                    let combined_width = width_sum + (colspan as usize - 1); // Add separator compensation
-                    line.push(" ".repeat(combined_width));
+                    // Fallback: empty space
+                    line.push(empty_line);
                 }
                 // Advance by colspan to skip all columns in the rowspan
                 current_col += colspan as usize;
@@ -405,30 +448,61 @@ pub(crate) fn format_row(
                 // Check if this cell spans multiple columns
                 let colspan = colspan_map[current_col].unwrap_or(1);
 
+                // Check if this is a rowspan cell that should display content in a later row
+                // (based on vertical alignment)
+                let should_show_content = if let Some((_, start_col, _)) =
+                    span_tracker.get_rowspan_start_including_self(row_index, current_col)
+                {
+                    // This is a rowspan starting at this row
+                    // Check if content should be displayed here based on vertical alignment
+                    let content_height = cell_lines.len();
+                    let content_offset = span_tracker.get_rowspan_content_offset(
+                        row_index,
+                        start_col,
+                        content_height,
+                    );
+                    content_offset == 0 // Only show if content starts at row 0 (this row)
+                } else {
+                    true // Normal cell, always show
+                };
+
+                // Get empty line for this column's width
+                let empty_width = if colspan == 1 {
+                    display_infos[current_col].width() as usize
+                } else {
+                    let visible_cols: Vec<&ColumnDisplayInfo> = display_infos
+                        [current_col..(current_col + colspan).min(display_infos.len())]
+                        .iter()
+                        .filter(|info| !info.is_hidden)
+                        .collect();
+                    let width_sum: usize =
+                        visible_cols.iter().map(|info| info.width() as usize).sum();
+                    let visible_colspan_count = visible_cols.len();
+                    width_sum + visible_colspan_count.saturating_sub(1)
+                };
+
                 if colspan == 1 {
                     // Normal cell
-                    if let Some(content) = cell_lines.get(line_index) {
-                        line.push(content.clone());
+                    if should_show_content {
+                        if let Some(content) = cell_lines.get(line_index) {
+                            line.push(content.clone());
+                        } else {
+                            line.push(" ".repeat(display_infos[current_col].width().into()));
+                        }
                     } else {
-                        line.push(" ".repeat(display_infos[current_col].width().into()));
+                        line.push(" ".repeat(empty_width));
                     }
                     current_col += 1;
                 } else {
                     // Colspan cell - the content is already formatted to the combined width
-                    if let Some(content) = cell_lines.get(line_index) {
-                        line.push(content.clone());
+                    if should_show_content {
+                        if let Some(content) = cell_lines.get(line_index) {
+                            line.push(content.clone());
+                        } else {
+                            line.push(" ".repeat(empty_width));
+                        }
                     } else {
-                        // Calculate combined width for empty line (only visible columns)
-                        let visible_cols: Vec<&ColumnDisplayInfo> = display_infos
-                            [current_col..current_col + colspan]
-                            .iter()
-                            .filter(|info| !info.is_hidden)
-                            .collect();
-                        let width_sum: usize =
-                            visible_cols.iter().map(|info| info.width() as usize).sum();
-                        let visible_colspan_count = visible_cols.len();
-                        let combined_width = width_sum + (visible_colspan_count.saturating_sub(1)); // Add separator compensation
-                        line.push(" ".repeat(combined_width));
+                        line.push(" ".repeat(empty_width));
                     }
                     // Skip the spanned columns - they're already included in the content above
                     // We need to advance through colspan-1 more logical columns
@@ -520,6 +594,42 @@ fn pad_line(line: &str, info: &ColumnDisplayInfo) -> String {
     padded_line += &" ".repeat(info.padding.1.into());
 
     padded_line
+}
+
+/// Apply vertical alignment to cell content.
+/// Pads the content with empty lines at top/bottom to achieve the desired alignment.
+fn apply_vertical_alignment(
+    content_lines: Vec<String>,
+    total_height: usize,
+    alignment: VerticalAlignment,
+    empty_line: String,
+) -> Vec<String> {
+    let content_height = content_lines.len();
+    if content_height >= total_height {
+        return content_lines;
+    }
+
+    let padding_needed = total_height - content_height;
+
+    match alignment {
+        VerticalAlignment::Top => {
+            let mut result = content_lines;
+            result.resize(total_height, empty_line);
+            result
+        }
+        VerticalAlignment::Bottom => {
+            let mut result = vec![empty_line; padding_needed];
+            result.extend(content_lines);
+            result
+        }
+        VerticalAlignment::Middle => {
+            let top_padding = padding_needed / 2;
+            let mut result = vec![empty_line.clone(); top_padding];
+            result.extend(content_lines);
+            result.resize(total_height, empty_line);
+            result
+        }
+    }
 }
 
 #[cfg(feature = "tty")]

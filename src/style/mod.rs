@@ -12,7 +12,7 @@ pub mod modifiers;
 pub mod presets;
 mod table;
 
-pub use cell::CellAlignment;
+pub use cell::{CellAlignment, VerticalAlignment};
 pub use column::{ColumnConstraint, Width};
 #[cfg(feature = "tty")]
 pub use styling_enums::{Attribute, Color};

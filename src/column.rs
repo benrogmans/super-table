@@ -1,4 +1,4 @@
-use crate::style::{CellAlignment, ColumnConstraint};
+use crate::style::{CellAlignment, ColumnConstraint, VerticalAlignment};
 
 /// A representation of a table's column.
 /// Useful for styling and specifying constraints how big a column should be.
@@ -38,6 +38,8 @@ pub struct Column {
     pub(crate) delimiter: Option<char>,
     /// Define the [CellAlignment] for all cells of this column
     pub(crate) cell_alignment: Option<CellAlignment>,
+    /// Define the [VerticalAlignment] for all cells of this column
+    pub(crate) vertical_alignment: Option<VerticalAlignment>,
     pub(crate) constraint: Option<ColumnConstraint>,
 }
 
@@ -49,6 +51,7 @@ impl Column {
             delimiter: None,
             constraint: None,
             cell_alignment: None,
+            vertical_alignment: None,
         }
     }
 
@@ -103,10 +106,16 @@ impl Column {
         matches!(self.constraint, Some(ColumnConstraint::Hidden))
     }
 
-    /// Set the alignment for content inside of cells for this column.\
+    /// Set the horizontal alignment for content inside of cells for this column.\
     /// **Note:** Alignment on a cell will always overwrite the column's setting.
     pub fn set_cell_alignment(&mut self, alignment: CellAlignment) {
         self.cell_alignment = Some(alignment);
+    }
+
+    /// Set the vertical alignment for content inside of cells for this column.\
+    /// **Note:** Vertical alignment on a cell will always overwrite the column's setting.
+    pub fn set_vertical_alignment(&mut self, alignment: VerticalAlignment) {
+        self.vertical_alignment = Some(alignment);
     }
 }
 

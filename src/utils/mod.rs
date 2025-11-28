@@ -2,7 +2,7 @@ pub mod arrangement;
 pub mod formatting;
 pub mod spanning;
 
-use crate::style::{CellAlignment, ColumnConstraint};
+use crate::style::{CellAlignment, ColumnConstraint, VerticalAlignment};
 use crate::{Column, Table};
 
 use arrangement::arrange_content;
@@ -15,15 +15,17 @@ use formatting::content_format::format_content;
 ///
 /// The idea is to have a place for all this intermediate stuff, without
 /// actually touching the Column struct.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ColumnDisplayInfo {
     pub padding: (u16, u16),
     pub delimiter: Option<char>,
     /// The actual allowed content width after arrangement
     pub content_width: u16,
-    /// The content alignment of cells in this column
+    /// The horizontal content alignment of cells in this column
     pub cell_alignment: Option<CellAlignment>,
-    is_hidden: bool,
+    /// The vertical content alignment of cells in this column
+    pub vertical_alignment: Option<VerticalAlignment>,
+    pub(crate) is_hidden: bool,
 }
 
 impl ColumnDisplayInfo {
@@ -37,6 +39,7 @@ impl ColumnDisplayInfo {
             delimiter: column.delimiter,
             content_width,
             cell_alignment: column.cell_alignment,
+            vertical_alignment: column.vertical_alignment,
             is_hidden: matches!(column.constraint, Some(ColumnConstraint::Hidden)),
         }
     }

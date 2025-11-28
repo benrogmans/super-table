@@ -1,7 +1,7 @@
 #[cfg(feature = "tty")]
 use crate::{Attribute, Color};
 
-use crate::style::CellAlignment;
+use crate::style::{CellAlignment, VerticalAlignment};
 
 /// A stylable table cell with content.
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
@@ -14,6 +14,7 @@ pub struct Cell {
     /// The default is ` `.
     pub(crate) delimiter: Option<char>,
     pub(crate) alignment: Option<CellAlignment>,
+    pub(crate) vertical_alignment: Option<VerticalAlignment>,
     #[cfg(feature = "tty")]
     pub(crate) fg: Option<Color>,
     #[cfg(feature = "tty")]
@@ -46,6 +47,7 @@ impl Cell {
             content: split_content,
             delimiter: None,
             alignment: None,
+            vertical_alignment: None,
             #[cfg(feature = "tty")]
             fg: None,
             #[cfg(feature = "tty")]
@@ -72,7 +74,7 @@ impl Cell {
         self
     }
 
-    /// Set the alignment of content for this cell.
+    /// Set the horizontal alignment of content for this cell.
     ///
     /// Setting this overwrites alignment settings of the
     /// [Column](crate::column::Column::set_cell_alignment) for this specific cell.
@@ -86,6 +88,28 @@ impl Cell {
     #[must_use]
     pub fn set_alignment(mut self, alignment: CellAlignment) -> Self {
         self.alignment = Some(alignment);
+
+        self
+    }
+
+    /// Set the vertical alignment of content for this cell.
+    ///
+    /// This controls where the content is positioned vertically when the cell's
+    /// row has more lines than this cell's content (e.g., due to another cell
+    /// in the same row having multi-line content).
+    ///
+    /// Setting this overwrites vertical alignment settings of the
+    /// [Column](crate::column::Column::set_vertical_alignment) for this specific cell.
+    /// ```
+    /// use super_table::VerticalAlignment;
+    /// use super_table::Cell;
+    ///
+    /// let mut cell = Cell::new("Some content")
+    ///     .set_vertical_alignment(VerticalAlignment::Middle);
+    /// ```
+    #[must_use]
+    pub fn set_vertical_alignment(mut self, alignment: VerticalAlignment) -> Self {
+        self.vertical_alignment = Some(alignment);
 
         self
     }
